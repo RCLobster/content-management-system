@@ -21,14 +21,39 @@ const db = mysql.createConnection(
     password: 'mysqlpassword',
     database: 'company_db'
   },
-  console.log(`Connected to the classlist_db database.`)
+  console.log(`Connected to the company_db database.`)
 );
 
 // MAIN CODE
 
-db.query('SELECT * FROM students', function (err, results) {
-  console.log(results);
-});
+const mainMenu = () => {
+    inquirer.prompt([{
+            type: "list",
+            message: "What would you like to do?",
+            name: "main_menu",
+            choices: [
+                "View all employees",
+                "Add a department",
+                "Add a role",
+                "Add an employee",
+                "Update an employee role"
+            ]
+        }]).then(answers => {
+            if(answers.main_menu === "View all employees"){
+                console.log("view employees");
+                viewAllEmployees();
+            }
+        })
+
+}
+
+const viewAllEmployees = () => {
+    console.log("Here are all the employees");
+    db.query('SELECT * FROM employee', function (err, results) {
+      console.table(results);
+    });
+}
+
 
 
 
@@ -45,3 +70,5 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+mainMenu();
