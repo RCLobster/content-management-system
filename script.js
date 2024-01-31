@@ -25,7 +25,6 @@ const db = mysql.createConnection(
 );
 
 // MAIN CODE
-
 const mainMenu = () => {
     // add a line spacer before each time main menu asks the user a question
     console.log("\n");
@@ -48,7 +47,6 @@ const mainMenu = () => {
             // depending on user's choice, run the corresponding function
             if(answers.main_menu === "View all employees"){
                 viewAllEmployees();
-
             } else if(answers.main_menu === "Add a department"){
                 addDepartment();
             } else if(answers.main_menu === "View all departments"){
@@ -75,6 +73,7 @@ const viewAllEmployees = () => {
     });
 };
 
+
 const addDepartment = () => {
     inquirer.prompt([
         {
@@ -90,6 +89,7 @@ const addDepartment = () => {
     });
 };
 
+
 const viewAllDepartments = () => {
     console.log("\nHere are all the departments");
     db.query('SELECT * FROM department', function (err, data) {
@@ -99,6 +99,7 @@ const viewAllDepartments = () => {
     });
 };
 
+
 const viewAllRoles = () => {
     console.log("\nHere are all the roles");
     db.query('SELECT * FROM roles', function (err, data) {
@@ -107,6 +108,7 @@ const viewAllRoles = () => {
       mainMenu();
     });
 };
+
 
 const addRole = () => {
     inquirer.prompt([
@@ -133,6 +135,7 @@ const addRole = () => {
         });
     });
 }
+
 
 const addEmployee = () => {
     inquirer.prompt([
@@ -165,6 +168,7 @@ const addEmployee = () => {
     });
 }
 
+
 const updateEmployeeRole = () => {
     inquirer.prompt([
         {
@@ -184,7 +188,6 @@ const updateEmployeeRole = () => {
         });
     });
 };
-
 
 
 // if we get a 404 error end the server
