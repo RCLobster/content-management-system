@@ -57,6 +57,8 @@ const mainMenu = () => {
                 viewAllRoles();
             } else if(answers.main_menu === "Add a role"){
                 addRole();
+            } else if(answers.main_menu === "Add an employee"){
+                addEmployee();
             }
         })
 
@@ -130,6 +132,36 @@ const addRole = () => {
     });
 }
 
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the employee's first name?",
+            name: "first_name"
+        },
+        {
+            type: "input",
+            message: "What is the employee's last name?",
+            name: "last_name"
+        },
+        {
+            type: "input",
+            message: "What is the role_id for this new employee?",
+            name: "role_id"
+        },
+        {
+            type: "input",
+            message: "What is the manager_id for this new employee?",
+            name: "man_id"
+        },
+        
+    ]).then(answers => {
+        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${answers.first_name}", "${answers.last_name}", ${answers.role_id}, ${answers.man_id})`, (err, data) => {
+            console.log(`New employee created: ${answers.first_name} ${answers.last_name}. Their role is ${answers.role_id} and they are managed by ${answers.man_id}`);
+            mainMenu();
+        });
+    });
+}
 
 
 
