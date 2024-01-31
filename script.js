@@ -59,6 +59,8 @@ const mainMenu = () => {
                 addRole();
             } else if(answers.main_menu === "Add an employee"){
                 addEmployee();
+            } else if(answers.main_menu === "Update an employee role"){
+                updateEmployeeRole();
             }
         })
 
@@ -162,6 +164,26 @@ const addEmployee = () => {
         });
     });
 }
+
+const updateEmployeeRole = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the ID of the employee you wish to update?",
+            name: "employ_id"
+        },
+        {
+            type: "input",
+            message: "What is the new role_id for this employee?",
+            name: "new_role"
+        }
+    ]).then(answers => {
+        db.query(`UPDATE employee SET role_id = ${answers.new_role} WHERE id = ${answers.employ_id}`, (err, data) => {
+            console.log(`This employee's new role is ${answers.new_role}`);
+            mainMenu();
+        });
+    });
+};
 
 
 
