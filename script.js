@@ -170,21 +170,42 @@ const addEmployee = () => {
 
 
 const updateEmployeeRole = () => {
-    inquirer.prompt([
-        {
-            type: "input",
-            message: "What is the ID of the employee you wish to update?",
-            name: "employ_id"
-        },
-        {
-            type: "input",
-            message: "What is the new role_id for this employee?",
-            name: "new_role"
-        }
-    ]).then(answers => {
-        db.query(`UPDATE employee SET role_id = ${answers.new_role} WHERE id = ${answers.employ_id}`, (err, data) => {
-            console.log(`This employee's new role is ${answers.new_role}`);
-            mainMenu();
+    db.query(`SELECT * FROM employee`, (err, data) => { 
+        const emps = data.map(({first_name, last_name, id}) => {
+            return {
+                name: `${first_name} ${last_name}`,
+                value: id
+            }
+        })
+
+        db.query(`SELECT * FROM roles`, (err, data) => {
+            const roles = data.map(({title, id}) => {
+                return {
+                    name: title,
+                    value: id
+                };
+            })
+            
+            inquirer.prompt([
+                {
+                    type: "list",
+                    message: "Which employee do you wish to update?",
+                    name: "employ_id",
+                    choices: emps
+                },
+                {
+                    type: "list",
+                    message: "What is the new role for this employee?",
+                    name: "role_id",
+                    choices: roles
+                }
+            ]).then(answers => {
+                console.log(answers);
+                db.query(`UPDATE employee SET role_id = ${answers.role_id} WHERE id = ${answers.employ_id}`, (err, data) => {
+                    console.log(`This employee's new role is ${answers.role_id}`);
+                    mainMenu();
+                });
+            });
         });
     });
 };
