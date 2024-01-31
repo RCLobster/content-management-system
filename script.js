@@ -55,6 +55,8 @@ const mainMenu = () => {
                 viewAllDepartments();
             } else if(answers.main_menu === "View all roles"){
                 viewAllRoles();
+            } else if(answers.main_menu === "Add a role"){
+                addRole();
             }
         })
 
@@ -95,14 +97,38 @@ const viewAllDepartments = () => {
 
 const viewAllRoles = () => {
     console.log("\nHere are all the roles");
-    db.query('SELECT * FROM role', function (err, data) {
+    db.query('SELECT * FROM roles', function (err, data) {
       console.table(data);
 
       mainMenu();
     });
 };
 
-
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the name of the new role?",
+            name: "role_name"
+        },
+        {
+            type: "input",
+            message: "What is the salary for this new role? (ex: 2000.00)",
+            name: "salary"
+        },
+        {
+            type: "input",
+            message: "What is the department_id of this role?",
+            name: "dept_id"
+        }
+        
+    ]).then(answers => {
+        db.query(`INSERT INTO roles (title, salary, department_id) VALUES ("${answers.role_name}", ${answers.salary}, ${answers.dept_id})`, (err, data) => {
+            console.log(`New role created: ${answers.role_name} with a salary of ${answers.salary}`);
+            mainMenu();
+        });
+    });
+}
 
 
 
